@@ -1,4 +1,8 @@
 //! Contains traits responsible for the actual construction of SQL statements
+//!
+//! The types in this module are part of Diesel's public API, but are generally
+//! only useful for implementing Diesel plugins. Applications should generally
+//! not need to care about the types inside of this module.
 pub mod debug;
 
 #[macro_use]
