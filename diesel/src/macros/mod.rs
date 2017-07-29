@@ -878,17 +878,22 @@ macro_rules! enable_multi_table_joins {
 /// #
 /// # fn main() {
 /// let sql = debug_sql!(users.count());
-/// assert_eq!(sql, "SELECT COUNT(*) FROM `users`");
+/// assert_eq!(sql, "SELECT COUNT(*) FROM `users` binds: []");
+/// let sql = debug_sql!(users.filter(n.eq(1)));
+/// assert_eq!(sql, "SELECT `users`.`id`, `users`.`n` FROM `users` WHERE \
+///                  `users`.`n` = ? binds: [1]");
 /// # }
 /// ```
 #[macro_export]
 macro_rules! debug_sql {
     ($query:expr) => {{
-        use $crate::query_builder::{QueryFragment, QueryBuilder};
+        use $crate::query_builder::{QueryFragment, QueryBuilder, DebugBinds};
         use $crate::query_builder::debug::DebugQueryBuilder;
+        let query = &$query;
         let mut query_builder = DebugQueryBuilder::new();
-        QueryFragment::<$crate::backend::Debug>::to_sql(&$query, &mut query_builder).unwrap();
-        query_builder.finish()
+        QueryFragment::<$crate::backend::Debug>::to_sql(query, &mut query_builder).unwrap();
+        let debug_binds = DebugBinds::<_, $crate::backend::Debug>::new(query);
+        format!("{} {}", query_builder.finish(), debug_binds)
     }};
 }
 
@@ -979,7 +984,7 @@ mod tests {
 
     #[test]
     fn table_with_custom_schema() {
-        let expected_sql = "SELECT `foo`.`bars`.`baz` FROM `foo`.`bars`";
+        let expected_sql = "SELECT `foo`.`bars`.`baz` FROM `foo`.`bars` binds: []";
         assert_eq!(expected_sql, debug_sql!(bars::table.select(bars::baz)));
     }
 

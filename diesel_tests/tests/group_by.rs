@@ -10,7 +10,8 @@ fn group_by_generates_group_by_sql() {
     let source = users::table.group_by(users::name).select(users::id).filter(users::hair_color.is_null());
     let expected_sql = "SELECT `users`.`id` FROM `users` \
                         WHERE `users`.`hair_color` IS NULL \
-                        GROUP BY `users`.`name`";
+                        GROUP BY `users`.`name` \
+                        binds: []";
 
     assert_eq!(expected_sql, &debug_sql!(source));
 }
@@ -26,7 +27,8 @@ fn boxed_queries_have_group_by_method() {
         .filter(users::hair_color.is_null());
     let expected_sql = "SELECT `users`.`id` FROM `users` \
                         WHERE `users`.`hair_color` IS NULL \
-                        GROUP BY `users`.`name`";
+                        GROUP BY `users`.`name` \
+                        binds: []";
 
     assert_eq!(expected_sql, &debug_sql!(source));
 }

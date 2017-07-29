@@ -8,6 +8,7 @@ mod clause_macro;
 
 mod ast_pass;
 pub mod bind_collector;
+mod debug_binds;
 mod delete_statement;
 #[doc(hidden)]
 pub mod functions;
@@ -27,6 +28,7 @@ pub mod update_statement;
 
 pub use self::ast_pass::AstPass;
 pub use self::bind_collector::BindCollector;
+pub use self::debug_binds::DebugBinds;
 pub use self::query_id::QueryId;
 #[doc(hidden)]
 pub use self::select_statement::{SelectStatement, BoxedSelectStatement};
