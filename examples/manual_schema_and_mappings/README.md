@@ -1,6 +1,7 @@
-# `rs-diesel-sqlite`
+# `Manual definition of model and schema`
 
-Diesel's `Getting Started` guide using SQLite instead of Postgresql
+Diesel's `Getting Started` guide but without the magic.
+It shows how to define the schema using `table!` and the model by implementing `Queryable` and `Insertable`.
 
 ## Usage
 
@@ -18,7 +19,7 @@ $ cargo run --bin publish_post 1
 $ cargo run --bin show_posts
 # your post will be printed here
 
-$ cargo run --bin delete_post 1
+$ cargo run --bin delete_post <title of post>
 
 $ cargo run --bin show_posts
 # observe that no posts are shown
